@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +16,8 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Local> locales = new ArrayList<>();
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 50, message = "El nombre no puede exceder 50 caracteres")
@@ -118,7 +122,14 @@ public class Usuario {
     public boolean isAceptaTerminos() {
         return aceptaTerminos;
     }
+    // Getters y setters
+    public List<Local> getLocales() {
+        return locales;
+    }
 
+    public void setLocales(List<Local> locales) {
+        this.locales = locales;
+    }
     public void setAceptaTerminos(boolean aceptaTerminos) {
         this.aceptaTerminos = aceptaTerminos;
     }
