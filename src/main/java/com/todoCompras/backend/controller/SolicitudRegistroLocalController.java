@@ -1,5 +1,6 @@
 package com.todoCompras.backend.controller;
 
+import com.todoCompras.backend.dto.local.LocalRequestDTO;
 import com.todoCompras.backend.model.SolicitudRegistroLocal;
 import com.todoCompras.backend.service.SolicitudRegistroLocalService;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,8 @@ public class SolicitudRegistroLocalController {
     }
 
     @PostMapping
-    public ResponseEntity<SolicitudRegistroLocal> crearSolicitud(@RequestBody SolicitudRegistroLocal solicitud) {
+    public ResponseEntity<SolicitudRegistroLocal> crearSolicitud(@RequestBody LocalRequestDTO localRequestDTO) {
+        SolicitudRegistroLocal solicitud = new SolicitudRegistroLocal();
         return ResponseEntity.ok(solicitudService.crearSolicitud(solicitud));
     }
 
