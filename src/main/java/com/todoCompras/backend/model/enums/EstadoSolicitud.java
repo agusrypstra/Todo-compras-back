@@ -1,4 +1,4 @@
-package com.todoCompras.backend.model;
+package com.todoCompras.backend.model.enums;
 
 public enum EstadoSolicitud {
     PENDIENTE,APROBADA,DENEGADA
