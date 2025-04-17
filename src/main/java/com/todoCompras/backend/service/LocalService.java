@@ -1,6 +1,7 @@
 package com.todoCompras.backend.service;
 
-import com.todoCompras.backend.dto.local.LocalRequestDTO;
+
+import com.todoCompras.backend.dto.solicitudes.SolicitudRegistroLocalRequestDTO;
 import com.todoCompras.backend.mapper.LocalMapper;
 import com.todoCompras.backend.model.Local;
 import com.todoCompras.backend.repository.LocalRepository;
@@ -19,7 +20,7 @@ public class LocalService {
         this.localMapper = localMapper;
     }
 
-    public Local registrarLocal(LocalRequestDTO dto) {
+    public Local registrarLocal(SolicitudRegistroLocalRequestDTO dto) {
         Local local = localMapper.toEntity(dto);
         return localRepository.save(local);
     }
