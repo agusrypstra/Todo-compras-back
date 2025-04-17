@@ -2,11 +2,9 @@ package com.todoCompras.backend.dto;
 
 import com.todoCompras.backend.model.Usuario;
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 
     public record UsuarioRespuestaDTO(
-            UUID id,
+            Long id,
             String nombre,
             String apellido,
             String email,
