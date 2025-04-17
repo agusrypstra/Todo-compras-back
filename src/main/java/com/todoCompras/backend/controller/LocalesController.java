@@ -1,6 +1,6 @@
 package com.todoCompras.backend.controller;
 
-import com.todoCompras.backend.dto.local.LocalRequestDTO;
+import com.todoCompras.backend.dto.solicitudes.SolicitudRegistroLocalRequestDTO;
 import com.todoCompras.backend.model.Local;
 import com.todoCompras.backend.service.LocalService;
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ public class LocalesController {
     @GetMapping
 
     @PostMapping
-    public ResponseEntity<?> crearLocal(@RequestBody @Valid LocalRequestDTO dto) {
+    public ResponseEntity<?> crearLocal(@RequestBody SolicitudRegistroLocalRequestDTO dto) {
         Local nuevoLocal = localService.registrarLocal(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoLocal);
     }

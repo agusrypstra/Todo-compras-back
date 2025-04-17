@@ -1,9 +1,12 @@
 package com.todoCompras.backend.mapper;
 
+import com.todoCompras.backend.dto.solicitudes.SolicitudRegistroLocalRequestDTO;
+import com.todoCompras.backend.model.Categoria;
+import com.todoCompras.backend.repository.CategoriaRepository;
 import com.todoCompras.backend.repository.UsuarioRepository;
-import com.todoCompras.backend.dto.local.LocalRequestDTO;
 import com.todoCompras.backend.model.Local;
 import com.todoCompras.backend.model.Usuario;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,17 +14,24 @@ import org.springframework.stereotype.Component;
 public class LocalMapper {
 
     private final UsuarioRepository usuarioRepository;
+    private final CategoriaRepository categoriaRepository;
 
     @Autowired
-    public LocalMapper(UsuarioRepository usuarioRepository) {
+    public LocalMapper(UsuarioRepository usuarioRepository, CategoriaRepository categoriaRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
-    public Local toEntity(LocalRequestDTO dto) {
+    public Local toEntity(SolicitudRegistroLocalRequestDTO dto) {
         Local local = new Local();
 
         local.setNombre(dto.getNombre());
-        local.setCategoria(dto.getCategoria());
+
+        Categoria categoria = categoriaRepository.findById(dto.getCategoriaId())
+                .orElseThrow(() -> new EntityNotFoundException("Categoría no encontrada"));
+
+        local.setCategoria(categoria);
+
         local.setDireccion(dto.getDireccion());
         local.setTelefonoLlamadas(dto.getTelefonoLlamadas());
         local.setTelefonoWhatsapp(dto.getTelefonoWhatsapp());

@@ -1,16 +1,16 @@
 package com.todoCompras.backend.model;
-
-import com.todoCompras.backend.model.enums.CategoriaLocal;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.UUID;
 
 // Entidad Local actualizada
 @Entity
 public class Local {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;    // ID DEL LOCAL FINAL
+    @GeneratedValue
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -19,9 +19,13 @@ public class Local {
     @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "La categoría es obligatoria")
-    private CategoriaLocal categoria; // LOCAL, EMPRENDIMIENTO, OFICIO
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
+    @OneToOne
+    @JoinColumn(name = "solicitud_id", nullable = false, unique = true)
+    private SolicitudRegistroLocal solicitud;
 
     @NotBlank(message = "La dirección es obligatoria")
     private String direccion;
@@ -69,6 +73,14 @@ public class Local {
         this.id = id;
     }
 
+    public SolicitudRegistroLocal getSolicitud() {
+        return solicitud;
+    }
+
+    public void setSolicitud(SolicitudRegistroLocal solicitud) {
+        this.solicitud = solicitud;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -77,11 +89,11 @@ public class Local {
         this.nombre = nombre;
     }
 
-    public CategoriaLocal getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(CategoriaLocal categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
