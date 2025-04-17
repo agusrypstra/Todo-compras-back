@@ -1,6 +1,6 @@
 package com.todoCompras.backend.repository;
 
-import com.todoCompras.backend.model.EstadoSolicitud;
+import com.todoCompras.backend.model.enums.EstadoSolicitud;
 import com.todoCompras.backend.model.SolicitudRegistroLocal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

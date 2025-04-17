@@ -1,37 +1,8 @@
-package com.todoCompras.backend.model;
+package com.todoCompras.backend.dto.solicitudes;
 
-import com.todoCompras.backend.model.enums.EstadoSolicitud;
-import jakarta.persistence.*;
-import java.util.List;
-import java.util.UUID;
-import java.util.*;
+public class SolicitudRegistroLocalResponseDTO {
 
-@Entity
-public class SolicitudRegistroLocal {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "administrador_id")
-    private Usuario administrador; // opcional
-
-    @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
-
-    @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL)
-    private List<MotivoRechazo> motivosRechazo = new ArrayList<>();
-
-    // Datos del negocio:
     private String nombre;
     private String direccion;
     private String telefonoLlamadas;
@@ -48,6 +19,9 @@ public class SolicitudRegistroLocal {
     private String linkPaginaWeb;
     private String fotoPerfil;
     private String fotoBanner;
+    private String estado;
+    private String categoriaNombre;
+    private String usuarioNombre;
 
     public Long getId() {
         return id;
@@ -55,46 +29,6 @@ public class SolicitudRegistroLocal {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public EstadoSolicitud getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoSolicitud estado) {
-        this.estado = estado;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Usuario getAdministrador() {
-        return administrador;
-    }
-
-    public void setAdministrador(Usuario administrador) {
-        this.administrador = administrador;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public List<MotivoRechazo> getMotivosRechazo() {
-        return motivosRechazo;
-    }
-
-    public void setMotivosRechazo(List<MotivoRechazo> motivosRechazo) {
-        this.motivosRechazo = motivosRechazo;
     }
 
     public String getNombre() {
@@ -223,5 +157,29 @@ public class SolicitudRegistroLocal {
 
     public void setFotoBanner(String fotoBanner) {
         this.fotoBanner = fotoBanner;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getCategoriaNombre() {
+        return categoriaNombre;
+    }
+
+    public void setCategoriaNombre(String categoriaNombre) {
+        this.categoriaNombre = categoriaNombre;
+    }
+
+    public String getUsuarioNombre() {
+        return usuarioNombre;
+    }
+
+    public void setUsuarioNombre(String usuarioNombre) {
+        this.usuarioNombre = usuarioNombre;
     }
 }

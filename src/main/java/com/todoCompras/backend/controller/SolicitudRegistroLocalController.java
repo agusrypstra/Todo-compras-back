@@ -1,16 +1,18 @@
 package com.todoCompras.backend.controller;
 
-import com.todoCompras.backend.dto.local.LocalRequestDTO;
+import com.todoCompras.backend.dto.solicitudes.SolicitudRegistroLocalRequestDTO;
 import com.todoCompras.backend.model.SolicitudRegistroLocal;
 import com.todoCompras.backend.service.SolicitudRegistroLocalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.net.URI;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/solicitudes")
+@RequestMapping("/api/solicitudes")
 public class SolicitudRegistroLocalController {
+
     private final SolicitudRegistroLocalService solicitudService;
 
     public SolicitudRegistroLocalController(SolicitudRegistroLocalService solicitudService) {
@@ -18,23 +20,8 @@ public class SolicitudRegistroLocalController {
     }
 
     @PostMapping
-    public ResponseEntity<SolicitudRegistroLocal> crearSolicitud(@RequestBody LocalRequestDTO localRequestDTO) {
-        SolicitudRegistroLocal solicitud = new SolicitudRegistroLocal();
-        return ResponseEntity.ok(solicitudService.crearSolicitud(solicitud));
-    }
-
-    @GetMapping("/pendientes")
-    public ResponseEntity<List<SolicitudRegistroLocal>> obtenerSolicitudesPendientes() {
-        return ResponseEntity.ok(solicitudService.obtenerSolicitudesPendientes());
-    }
-
-    @PutMapping("/{id}/aprobar")
-    public ResponseEntity<SolicitudRegistroLocal> aprobarSolicitud(@PathVariable Long id) {
-        return ResponseEntity.ok(solicitudService.aprobarSolicitud(id));
-    }
-
-    @PutMapping("/{id}/rechazar")
-    public ResponseEntity<SolicitudRegistroLocal> rechazarSolicitud(@PathVariable Long id, @RequestBody List<String> motivos) {
-        return ResponseEntity.ok(solicitudService.rechazarSolicitud(id, motivos));
+    public ResponseEntity<Void> crearSolicitud(@RequestBody SolicitudRegistroLocalRequestDTO dto) {
+        Long id = solicitudService.crearSolicitud(dto);
+        return ResponseEntity.created(URI.create("/api/solicitudes/" + id)).build();
     }
 }
