@@ -1,10 +1,36 @@
 package com.todoCompras.backend.dto.solicitudes;
 
 public class SolicitudRegistroLocalResponseDTO {
+    public SolicitudRegistroLocalResponseDTO(Long id, String nombre, String direccion, String provincia, String localidad, String telefonoLlamadas, String telefonoWhatsapp, String ubicacionGoogleMaps, String descripcion, String diasAtencionDesde, String diasAtencionHasta, String horarioAtencionDesde, String horarioAtencionHasta, boolean es24Horas, String linkInstagram, String linkFacebook, String linkPaginaWeb, String fotoPerfil, String fotoBanner, String estado, String categoriaNombre, String usuarioNombre) {
+        this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.provincia = provincia;
+        this.localidad = localidad;
+        this.telefonoLlamadas = telefonoLlamadas;
+        this.telefonoWhatsapp = telefonoWhatsapp;
+        this.ubicacionGoogleMaps = ubicacionGoogleMaps;
+        this.descripcion = descripcion;
+        this.diasAtencionDesde = diasAtencionDesde;
+        this.diasAtencionHasta = diasAtencionHasta;
+        this.horarioAtencionDesde = horarioAtencionDesde;
+        this.horarioAtencionHasta = horarioAtencionHasta;
+        this.es24Horas = es24Horas;
+        this.linkInstagram = linkInstagram;
+        this.linkFacebook = linkFacebook;
+        this.linkPaginaWeb = linkPaginaWeb;
+        this.fotoPerfil = fotoPerfil;
+        this.fotoBanner = fotoBanner;
+        this.estado = estado;
+        this.categoriaNombre = categoriaNombre;
+        this.usuarioNombre = usuarioNombre;
+    }
 
     private Long id;
     private String nombre;
     private String direccion;
+    private String provincia;
+    private String localidad;
     private String telefonoLlamadas;
     private String telefonoWhatsapp;
     private String ubicacionGoogleMaps;
@@ -37,6 +63,22 @@ public class SolicitudRegistroLocalResponseDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+    
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
     }
 
     public String getDireccion() {

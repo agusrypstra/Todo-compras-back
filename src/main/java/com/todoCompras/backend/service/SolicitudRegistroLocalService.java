@@ -1,13 +1,16 @@
 package com.todoCompras.backend.service;
 
 import com.todoCompras.backend.dto.solicitudes.SolicitudRegistroLocalRequestDTO;
+import com.todoCompras.backend.dto.solicitudes.SolicitudRegistroLocalResponseDTO;
 import com.todoCompras.backend.model.*;
 import com.todoCompras.backend.model.enums.EstadoSolicitud;
 import com.todoCompras.backend.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SolicitudRegistroLocalService {
@@ -39,7 +42,37 @@ public class SolicitudRegistroLocalService {
 
         return solicitud.getId();
     }
-
+    public List<SolicitudRegistroLocalResponseDTO> obtenerSolicitudes() {
+        return solicitudRepo.findAll().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+    private SolicitudRegistroLocalResponseDTO mapToDTO(SolicitudRegistroLocal solicitud) {
+        return new SolicitudRegistroLocalResponseDTO(
+                solicitud.getId(),
+                solicitud.getNombre(),
+                solicitud.getDireccion(),
+                solicitud.getProvincia(),
+                solicitud.getLocalidad(),
+                solicitud.getTelefonoLlamadas(),
+                solicitud.getTelefonoWhatsapp(),
+                solicitud.getUbicacionGoogleMaps(),
+                solicitud.getDescripcion(),
+                solicitud.getDiasAtencionDesde(),
+                solicitud.getDiasAtencionHasta(),
+                solicitud.getHorarioAtencionDesde(),
+                solicitud.getHorarioAtencionHasta(),
+                solicitud.isEs24Horas(),
+                solicitud.getLinkInstagram(),
+                solicitud.getLinkFacebook(),
+                solicitud.getLinkPaginaWeb(),
+                solicitud.getFotoPerfil(),
+                solicitud.getFotoBanner(),
+                solicitud.getEstado().name(), // Si usás Enum
+                solicitud.getCategoria().getNombre(),
+                solicitud.getUsuario().getNombre()
+        );
+    }
     private SolicitudRegistroLocal mapFromDTO(SolicitudRegistroLocalRequestDTO dto, Usuario usuario, Categoria categoria) {
         SolicitudRegistroLocal s = new SolicitudRegistroLocal();
         s.setUsuario(usuario);

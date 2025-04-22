@@ -11,6 +11,8 @@ public class SolicitudRegistroLocalRequestDTO {
     private Long categoriaId;
     private String nombre;
     private String direccion;
+    private String provincia;
+    private String localidad;
     private String telefonoLlamadas;
     private String telefonoWhatsapp;
     private String ubicacionGoogleMaps;
@@ -25,6 +27,7 @@ public class SolicitudRegistroLocalRequestDTO {
     private String linkPaginaWeb;
     private String fotoPerfil;
     private String fotoBanner;
+
 
     public Long getUsuarioId() {
         return usuarioId;
@@ -48,6 +51,22 @@ public class SolicitudRegistroLocalRequestDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
     }
 
     public String getDireccion() {

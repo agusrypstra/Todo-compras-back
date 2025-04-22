@@ -34,6 +34,8 @@ public class SolicitudRegistroLocal {
     // Datos del negocio:
     private String nombre;
     private String direccion;
+    private String provincia;
+    private String localidad;
     private String telefonoLlamadas;
     private String telefonoWhatsapp;
     private String ubicacionGoogleMaps;
@@ -75,6 +77,22 @@ public class SolicitudRegistroLocal {
 
     public Usuario getAdministrador() {
         return administrador;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
     }
 
     public void setAdministrador(Usuario administrador) {
