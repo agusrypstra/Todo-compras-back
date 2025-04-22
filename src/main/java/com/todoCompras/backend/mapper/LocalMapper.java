@@ -33,6 +33,8 @@ public class LocalMapper {
         local.setCategoria(categoria);
 
         local.setDireccion(dto.getDireccion());
+        local.setProvincia(dto.getProvincia());
+        local.setLocalidad(dto.getLocalidad());
         local.setTelefonoLlamadas(dto.getTelefonoLlamadas());
         local.setTelefonoWhatsapp(dto.getTelefonoWhatsapp());
         local.setUbicacionGoogleMaps(dto.getUbicacionGoogleMaps());

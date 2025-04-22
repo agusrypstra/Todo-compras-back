@@ -15,17 +15,19 @@ public class Local {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
-
-    @NotBlank(message = "El nombre es obligatorio")
-    private String nombre;
-
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
-
     @OneToOne
     @JoinColumn(name = "solicitud_id", nullable = false, unique = true)
     private SolicitudRegistroLocal solicitud;
+    @NotBlank(message = "El nombre es obligatorio")
+    private String nombre;
+
+    @NotBlank(message = "La provincia es obligatoria")
+    private String provincia;
+    @NotBlank(message = "La localidad es obligatoria")
+    private String localidad;
 
     @NotBlank(message = "La dirección es obligatoria")
     private String direccion;
@@ -212,6 +214,7 @@ public class Local {
     public String getFotoBanner() {
         return fotoBanner;
     }
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -219,7 +222,24 @@ public class Local {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
     public void setFotoBanner(String fotoBanner) {
         this.fotoBanner = fotoBanner;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
     }
 }
