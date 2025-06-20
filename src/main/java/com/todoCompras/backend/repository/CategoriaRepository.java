@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
-    List<Categoria> findByCategoriaPadreIsNull(); // Para padres
-    List<Categoria> findByCategoriaPadreId(Long id); // Para subcategorías
+    List<Categoria> findByPadreIsNull(); // Para padres
+    List<Categoria> findByPadreId(Long id);
     Optional<Categoria> findByNombre(String nombre);
 }

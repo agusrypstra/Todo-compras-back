@@ -1,12 +1,13 @@
 package com.todoCompras.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Categoria {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,11 +15,20 @@ public class Categoria {
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_padre_id")
-    private Categoria categoriaPadre;
+    @JoinColumn(name = "padre_id")
+    @JsonBackReference
+    private Categoria padre;
 
-    @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
-    private List<Categoria> subcategorias = new ArrayList<>();
+    @OneToMany(mappedBy = "padre", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Categoria> subcategorias;
+
+    public Categoria() {
+    }
+
+    public Categoria(String nombre) {
+        this.nombre = nombre;
+    }
 
     public Long getId() {
         return id;
@@ -36,12 +46,12 @@ public class Categoria {
         this.nombre = nombre;
     }
 
-    public Categoria getCategoriaPadre() {
-        return categoriaPadre;
+    public Categoria getPadre() {
+        return padre;
     }
 
-    public void setCategoriaPadre(Categoria categoriaPadre) {
-        this.categoriaPadre = categoriaPadre;
+    public void setPadre(Categoria padre) {
+        this.padre = padre;
     }
 
     public List<Categoria> getSubcategorias() {

@@ -52,27 +52,26 @@ public class DataInitializer {
                 }
 
                 // Crear categorías principales y subcategorías
-                createCategoriaIfNotExists(categoriaRepository, "LOCALES", null);
-                createCategoriaIfNotExists(categoriaRepository, "EMPRENDIMIENTOS", null);
-                createCategoriaIfNotExists(categoriaRepository, "OFICIOS", null);
+                Categoria locales = categoriaRepository.save(new Categoria("locales"));
+                Categoria emprendimientos = categoriaRepository.save(new Categoria("emprendimientos"));
+                Categoria oficios = categoriaRepository.save(new Categoria("oficios"));
 
-                createCategoriaIfNotExists(categoriaRepository, "Restaurantes", "LOCALES");
-                createCategoriaIfNotExists(categoriaRepository, "Artesanía", "EMPRENDIMIENTOS");
-                createCategoriaIfNotExists(categoriaRepository, "Electricista", "OFICIOS");
+                createCategoriaIfNotExists(categoriaRepository, "restaurantes", locales.getId());
+                createCategoriaIfNotExists(categoriaRepository, "artesanias", emprendimientos.getId());
+                createCategoriaIfNotExists(categoriaRepository, "electricistas", oficios.getId());
             }
         };
     }
 
-    private void createCategoriaIfNotExists(CategoriaRepository categoriaRepository, String nombre, String nombrePadre) {
-        if (categoriaRepository.findByNombre(nombre).isEmpty()) {
-            Categoria categoria = new Categoria();
-            categoria.setNombre(nombre);
+    private static void createCategoriaIfNotExists(CategoriaRepository categoriaRepository, String nombre, Long padreId) {
+        if (categoriaRepository.findByNombre(nombre).isPresent()) return;
 
-            if (nombrePadre != null) {
-                categoriaRepository.findByNombre(nombrePadre).ifPresent(categoria::setCategoriaPadre);
-            }
+        Categoria categoria = new Categoria(nombre);
 
-            categoriaRepository.save(categoria);
+        if (padreId != null) {
+            categoriaRepository.findById(padreId).ifPresent(categoria::setPadre);
         }
+
+        categoriaRepository.save(categoria);
     }
 }

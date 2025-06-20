@@ -1,6 +1,7 @@
 package com.todoCompras.backend.service;
 
 import com.todoCompras.backend.dto.CategoriaDTO;
+import com.todoCompras.backend.model.Categoria;
 import com.todoCompras.backend.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +19,14 @@ public class CategoriaService {
     }
 
     public List<CategoriaDTO> obtenerCategoriasPadre() {
-        return categoriaRepository.findByCategoriaPadreIsNull()
-                .stream()
-                .map(cat -> new CategoriaDTO(cat.getId(), cat.getNombre()))
-                .collect(Collectors.toList());
+        List<Categoria> categorias = categoriaRepository.findByPadreIsNull();
+        return categorias.stream()
+                .map(c -> new CategoriaDTO(c.getId() , c.getNombre()))
+                .toList();   // Java 16+
     }
 
     public List<CategoriaDTO> obtenerSubcategorias(Long categoriaPadreId) {
-        return categoriaRepository.findByCategoriaPadreId(categoriaPadreId)
+        return categoriaRepository.findByPadreId(categoriaPadreId)
                 .stream()
                 .map(cat -> new CategoriaDTO(cat.getId(), cat.getNombre()))
                 .collect(Collectors.toList());
