@@ -242,4 +242,9 @@ public class Local {
     public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
+
+    public void setHorarioCierre(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setHorarioCierre'");
+    }
 }
