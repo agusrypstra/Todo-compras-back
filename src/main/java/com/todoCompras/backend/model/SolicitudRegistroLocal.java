@@ -4,6 +4,7 @@ import com.todoCompras.backend.model.enums.EstadoSolicitud;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -50,7 +51,15 @@ public class SolicitudRegistroLocal {
     private String linkPaginaWeb;
     private String fotoPerfil;
     private String fotoBanner;
+    private LocalDateTime fechaSolicitud = LocalDateTime.now();
 
+
+    public void setFechaSolicitud(LocalDateTime fechaSolicitud) {
+        this.fechaSolicitud = fechaSolicitud;
+    }
+    public LocalDateTime getFechaSolicitud() {
+        return fechaSolicitud;
+    }
     public Long getId() {
         return id;
     }
