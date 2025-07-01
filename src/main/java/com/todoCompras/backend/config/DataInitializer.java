@@ -1,77 +1,94 @@
 package com.todoCompras.backend.config;
 
-import com.todoCompras.backend.model.enums.GeneroEnum;
 import com.todoCompras.backend.model.Categoria;
+import com.todoCompras.backend.model.Local;
+import com.todoCompras.backend.model.SolicitudRegistroLocal;
 import com.todoCompras.backend.model.Usuario;
 import com.todoCompras.backend.repository.CategoriaRepository;
+import com.todoCompras.backend.repository.LocalRepository;
+import com.todoCompras.backend.repository.SolicitudRegistroLocalRepository;
 import com.todoCompras.backend.repository.UsuarioRepository;
-import org.springframework.boot.ApplicationArguments;
+import com.todoCompras.backend.utils.factories.CategoriaFactory;
+import com.todoCompras.backend.utils.factories.FicticioFactory;
+import com.todoCompras.backend.utils.factories.UsuarioFactory;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalDate;
-import java.util.UUID;
+import java.util.List;
 
 @Configuration
 public class DataInitializer {
 
     @Bean
-    public ApplicationRunner initDatabase(UsuarioRepository usuarioRepository, CategoriaRepository categoriaRepository) {
-        return new ApplicationRunner() {
-            @Override
-            public void run(ApplicationArguments args) {
-                // Crear usuario administrador si no existe
-                if (usuarioRepository.findByEmail("admin@admin.com").isEmpty()) {
-                    Usuario admin = new Usuario();
-                    admin.setNombre("Admin");
-                    admin.setApellido("Principal");
-                    admin.setEmail("admin@admin.com");
-                    admin.setContrasena("admin1234"); // En producción, hashearla
-                    admin.setTelefono("+5490000000000");
-                    admin.setFechaNacimiento(LocalDate.of(1990, 1, 1));
-                    admin.setGenero(GeneroEnum.OTRO);
-                    admin.setAceptaTerminos(true);
-                    admin.setEsAdmin(true);
-                    usuarioRepository.save(admin);
-                }
+    public ApplicationRunner initDatabase(UsuarioRepository usuarioRepository,
+            CategoriaRepository categoriaRepository,
+            LocalRepository localRepository,
+            SolicitudRegistroLocalRepository solicitudRepository) {
+    return args -> {
+        // 1. Crear usuarios
+        Usuario admin = usuarioRepository.findByEmail("admin@admin.com")
+            .orElseGet(() -> usuarioRepository.save(UsuarioFactory.crearAdmin()));
+        
+        Usuario user = usuarioRepository.findByEmail("usuario@correo.com")
+            .orElseGet(() -> usuarioRepository.save(UsuarioFactory.crearUsuarioComun()));
 
-                // Crear usuario común si no existe
-                if (usuarioRepository.findByEmail("usuario@correo.com").isEmpty()) {
-                    Usuario user = new Usuario();
-                    user.setNombre("Juan");
-                    user.setApellido("Pérez");
-                    user.setEmail("usuario@correo.com");
-                    user.setContrasena("usuario1234");
-                    user.setTelefono("+5491111111111");
-                    user.setFechaNacimiento(LocalDate.of(1995, 5, 15));
-                    user.setGenero(GeneroEnum.MASCULINO);
-                    user.setAceptaTerminos(true);
-                    user.setEsAdmin(false);
-                    usuarioRepository.save(user);
-                }
+        // 2. Crear categorías
+        
+        // ===== 1. Crear categorías padres fijas =====
+            Categoria locales = crearCategoriaPadreSiNoExiste(categoriaRepository, "locales");
+            Categoria emprendimientos = crearCategoriaPadreSiNoExiste(categoriaRepository, "emprendimientos");
+            Categoria profesionales = crearCategoriaPadreSiNoExiste(categoriaRepository, "profesionales");
 
-                // Crear categorías principales y subcategorías
-                Categoria locales = categoriaRepository.save(new Categoria("locales"));
-                Categoria emprendimientos = categoriaRepository.save(new Categoria("emprendimientos"));
-                Categoria oficios = categoriaRepository.save(new Categoria("oficios"));
+            // ===== 2. Crear subcategorías para cada padre =====
+            // Locales
+            crearSubcategoriaSiNoExiste(categoriaRepository, "restaurantes", locales);
+            crearSubcategoriaSiNoExiste(categoriaRepository, "cafeterías", locales);
+            crearSubcategoriaSiNoExiste(categoriaRepository, "bares", locales);
 
-                createCategoriaIfNotExists(categoriaRepository, "restaurantes", locales.getId());
-                createCategoriaIfNotExists(categoriaRepository, "artesanias", emprendimientos.getId());
-                createCategoriaIfNotExists(categoriaRepository, "electricistas", oficios.getId());
+            // Emprendimientos
+            crearSubcategoriaSiNoExiste(categoriaRepository, "artesanías", emprendimientos);
+            crearSubcategoriaSiNoExiste(categoriaRepository, "diseño gráfico", emprendimientos);
+            crearSubcategoriaSiNoExiste(categoriaRepository, "ropa handmade", emprendimientos);
+
+            // Profesionales
+            crearSubcategoriaSiNoExiste(categoriaRepository, "abogados", profesionales);
+            crearSubcategoriaSiNoExiste(categoriaRepository, "médicos", profesionales);
+            crearSubcategoriaSiNoExiste(categoriaRepository, "arquitectos", profesionales);
+        
+            
+            List<Categoria> subcategorias = categoriaRepository.findByPadreIsNotNull();
+
+
+        
+
+            if (localRepository.count() == 0) {
+                subcategorias.forEach(subcategoria -> {
+                    for (int i = 0; i < 1; i++) {
+                        // Crear solicitud aprobada
+                        SolicitudRegistroLocal solicitud = FicticioFactory.crearSolicitudAprobada(
+                            user, 
+                            subcategoria,
+                            admin
+                        );
+                        solicitud = solicitudRepository.save(solicitud);
+                        
+                        // Crear local asociado
+                        Local local = FicticioFactory.crearLocalDesdeSolicitud(solicitud);
+                        localRepository.save(local);
+                    }
+                });
             }
-        };
+    };
+}
+
+    private Categoria crearCategoriaPadreSiNoExiste(CategoriaRepository repo, String nombre) {
+        return repo.findByNombre(nombre)
+            .orElseGet(() -> repo.save(CategoriaFactory.crearCategoriaRaiz(nombre)));
     }
 
-    private static void createCategoriaIfNotExists(CategoriaRepository categoriaRepository, String nombre, Long padreId) {
-        if (categoriaRepository.findByNombre(nombre).isPresent()) return;
-
-        Categoria categoria = new Categoria(nombre);
-
-        if (padreId != null) {
-            categoriaRepository.findById(padreId).ifPresent(categoria::setPadre);
+    private void crearSubcategoriaSiNoExiste(CategoriaRepository repo, String nombre, Categoria padre) {
+        if (!repo.existsByNombreAndPadreId(nombre, padre.getId())) {
+            repo.save(CategoriaFactory.crearCategoria(nombre, padre));
         }
-
-        categoriaRepository.save(categoria);
     }
 }
